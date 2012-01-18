@@ -31,14 +31,14 @@ GHashTable* set_new (GHashFunc hash_func, GEqualFunc equal_func, GDestroyNotify 
   return g_hash_table_new_full (hash_func, equal_func, destroy, NULL);
 }
 
-void set_insert (GHashTable *set, gpointer element) {
+void set_insert(GHashTable* set, gpointer element) {
   g_hash_table_insert (set, element, element);
 }
 
-gboolean set_contains (GHashTable *set, gpointer element) {
+gboolean set_contains(GHashTable* set, gpointer element) {
   return g_hash_table_lookup_extended (set, element, NULL, NULL);
 }
 
-gboolean set_remove (GHashTable *set, gpointer element) {
+gboolean set_remove(GHashTable* set, gpointer element) {
   return g_hash_table_remove (set, element);
 }

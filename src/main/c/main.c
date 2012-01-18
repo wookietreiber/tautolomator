@@ -34,11 +34,11 @@
 #define OR  "v"
 #define NOT "-"
 
-void input2klauseln(int argc, char **argv) {
+void input2klauseln(int argc, char** argv) {
 
 }
 
-int main(int argc, char **argv) {
+int main(int argc, char** argv) {
   printf("%s\n", AND);
   printf("%s\n", OR);
   printf("%s\n", NOT);

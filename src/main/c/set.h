@@ -29,8 +29,8 @@
 
 GHashTable* set_new (GHashFunc hash_func, GEqualFunc equal_func, GDestroyNotify destroy);
 
-void set_insert (GHashTable *set, gpointer element);
+void set_insert (GHashTable* set, gpointer element);
 
-gboolean set_contains (GHashTable *set, gpointer element);
+gboolean set_contains (GHashTable* set, gpointer element);
 
-gboolean set_remove (GHashTable *set, gpointer element);
+gboolean set_remove (GHashTable* set, gpointer element);
