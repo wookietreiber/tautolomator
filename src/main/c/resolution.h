@@ -25,7 +25,6 @@
  ****************************************************************************/
 
 
-#include <stdbool.h>
 #include <glib.h>
 
-bool resolution(GHashTable* clauses);
+gboolean resolution(GHashTable* clauses);

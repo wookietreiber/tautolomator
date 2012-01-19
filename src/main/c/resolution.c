@@ -25,10 +25,9 @@
  ****************************************************************************/
 
 
-#include <stdbool.h>
 #include <glib.h>
 #include "set.h"
 
-bool resolution(GHashTable* clauses) {
-  return false;
+gboolean resolution(GHashTable* clauses) {
+  return FALSE;
 }
