@@ -34,3 +34,5 @@ void set_insert (GHashTable* set, gpointer element);
 gboolean set_contains (GHashTable* set, gpointer element);
 
 gboolean set_remove (GHashTable* set, gpointer element);
+
+void set_foreach(GHashTable* set, GFunc func, gpointer user_data);
