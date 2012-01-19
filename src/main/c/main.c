@@ -34,14 +34,14 @@
 #define OR  "v"
 #define NOT "-"
 
-void input2klauseln(int argc, char** argv) {
-
+void get_input_as_clauses() {
+  gchar* inputstring = "Our Inputstring";
+  g_print("Please insert a logical statement as conjunctive normal form: ");
+  scanf("%s", &inputstring);
+  g_print("The inserted string is: %s\n", &inputstring);
 }
 
 int main(int argc, char** argv) {
-  printf("%s\n", AND);
-  printf("%s\n", OR);
-  printf("%s\n", NOT);
-
+  get_input_as_clauses();
   return 0;
 }
