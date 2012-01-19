@@ -34,6 +34,10 @@
 #define OR  "v"
 #define NOT "-"
 
+gchar* g_strreplace(gchar* string, gchar* search, gchar* replace) {
+	return (g_strjoinv (replace, g_strsplit (string, search, -1)));
+}
+
 void get_input_as_clauses() {
   gchar* inputstring = "Our Inputstring";
   g_print("Please insert a logical statement as conjunctive normal form: ");
