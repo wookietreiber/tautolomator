@@ -28,6 +28,41 @@
 #include <glib.h>
 #include "set.h"
 
+void enqueue(gpointer clause, gpointer unhandled) {
+  g_queue_push_tail(unhandled, clause);
+}
+
+gboolean rec_resol(GHashTable* clauses, GQueue* unhandled) {
+  if (unhandled->length == 0)
+    return FALSE;
+
+  else {
+    GHashTable* head = g_queue_pop_head(unhandled);
+
+    if (g_hash_table_size(head) == 0)
+      return TRUE;
+
+    else {
+      GList* iter = set_iterator(clauses);
+      iter = g_list_remove(iter, head);
+
+      for (; iter; iter = iter->next) {
+        // find resolvent
+        // if clauses not contains resolvent add to clauses and unhandled
+      }
+
+      return rec_resol(clauses, unhandled);
+    }
+  }
+}
+
 gboolean resolution(GHashTable* clauses) {
-  return FALSE;
+  GQueue* q = g_queue_new();
+  set_foreach(clauses, enqueue, q);
+
+  gboolean result = rec_resol(clauses, q);
+
+  g_queue_free(q);
+
+  return result;
 }
