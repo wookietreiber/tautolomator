@@ -46,3 +46,7 @@ gboolean set_remove(GHashTable* set, gpointer element) {
 void set_foreach(GHashTable* set, GFunc func, gpointer user_data) {
   g_list_foreach(g_hash_table_get_keys(set), func, user_data);
 }
+
+GList* set_iterator(GHashTable* set) {
+  return g_hash_table_get_keys(set);
+}
