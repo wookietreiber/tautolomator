@@ -25,24 +25,7 @@
  ****************************************************************************/
 
 
-#include <stdio.h>
+#include <stdbool.h>
 #include <glib.h>
 
-#include "resolution.h"
-#include "set.h"
-
-#define AND "^"
-#define OR  "v"
-#define NOT "-"
-
-void input2klauseln(int argc, char** argv) {
-
-}
-
-int main(int argc, char** argv) {
-  printf("%s\n", AND);
-  printf("%s\n", OR);
-  printf("%s\n", NOT);
-
-  return 0;
-}
+bool resolution(GHashTable* clauses);
