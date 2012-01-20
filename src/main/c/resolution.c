@@ -39,11 +39,11 @@ gboolean rec_resol(GHashTable* clauses, GQueue* unhandled) {
   else {
     GHashTable* head = g_queue_pop_head(unhandled);
 
-    if (g_hash_table_size(head) == 0)
+    if (g_hash_set_size(head) == 0)
       return TRUE;
 
     else {
-      GList* iter = set_iterator(clauses);
+      GList* iter = g_hash_set_iterator(clauses);
       iter = g_list_remove(iter, head);
 
       for (; iter; iter = iter->next) {
@@ -58,7 +58,7 @@ gboolean rec_resol(GHashTable* clauses, GQueue* unhandled) {
 
 gboolean resolution(GHashTable* clauses) {
   GQueue* q = g_queue_new();
-  set_foreach(clauses, enqueue, q);
+  g_hash_set_foreach(clauses, enqueue, q);
 
   gboolean result = rec_resol(clauses, q);
 

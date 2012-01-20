@@ -27,14 +27,18 @@
 
 #include <glib.h>
 
-GHashTable* set_new (GHashFunc hash_func, GEqualFunc equal_func, GDestroyNotify destroy);
+GHashTable* g_hash_set_new(GHashFunc hash_func, GEqualFunc equal_func);
 
-void set_insert (GHashTable* set, gpointer element);
+GHashTable* g_hash_set_new_full(GHashFunc hash_func, GEqualFunc equal_func, GDestroyNotify destroy);
 
-gboolean set_contains (GHashTable* set, gpointer element);
+guint g_hash_set_size(GHashTable* set);
 
-gboolean set_remove (GHashTable* set, gpointer element);
+void g_hash_set_insert(GHashTable* set, gpointer element);
 
-void set_foreach(GHashTable* set, GFunc func, gpointer user_data);
+gboolean g_hash_set_contains(GHashTable* set, gpointer element);
 
-GList* set_iterator(GHashTable* set);
+gboolean g_hash_set_remove(GHashTable* set, gpointer element);
+
+void g_hash_set_foreach(GHashTable* set, GFunc func, gpointer user_data);
+
+GList* g_hash_set_iterator(GHashTable* set);
