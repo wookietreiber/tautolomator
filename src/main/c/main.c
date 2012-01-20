@@ -26,6 +26,7 @@
 
 
 #include <stdio.h>
+#include <string.h>
 #include <glib.h>
 
 #include "resolution.h"
@@ -37,7 +38,7 @@
 
 void remove_brackets(char* inputstring) {
   int i;
-  int len = strlen(inputstring);
+  size_t len = strlen(inputstring);
   for (i = 0; i <= len; i++) {
     if(inputstring[i] == '(' ||
         inputstring[i] == ')'){
@@ -52,7 +53,7 @@ void get_input_as_clauses() {
   g_print("Please insert a logical statement as conjunctive normal form: ");
   scanf("%s", &inputstring);
   g_print("The inserted string is: %s\n", &inputstring);
-  remove_brackets(&inputstring);  
+  remove_brackets(&inputstring);
 }
 
 int main(int argc, char** argv) {
