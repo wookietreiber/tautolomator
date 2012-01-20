@@ -28,6 +28,7 @@
 #include <stdio.h>
 #include <glib.h>
 
+#include "resolution.h"
 #include "set.h"
 
 #define AND "^"

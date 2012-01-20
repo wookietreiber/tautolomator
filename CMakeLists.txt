@@ -15,10 +15,12 @@ set(SRCDIR "${CMAKE_CURRENT_SOURCE_DIR}/src/main/c")
 
 set(TAUTOLOMATOR_SRCS
   ${SRCDIR}/main.c
+  ${SRCDIR}/resolution.c
   ${SRCDIR}/set.c
 )
 
 set(TAUTOLOMATOR_H
+  ${SRCDIR}/resolution.h
   ${SRCDIR}/set.h
 )
 

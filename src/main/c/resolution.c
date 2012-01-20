@@ -26,19 +26,43 @@
 
 
 #include <glib.h>
+#include "set.h"
 
-GHashTable* g_hash_set_new(GHashFunc hash_func, GEqualFunc equal_func);
+void enqueue(gpointer clause, gpointer unhandled) {
+  g_queue_push_tail(unhandled, clause);
+}
 
-GHashTable* g_hash_set_new_full(GHashFunc hash_func, GEqualFunc equal_func, GDestroyNotify destroy);
+gboolean rec_resol(GHashTable* clauses, GQueue* unhandled) {
+  if (unhandled->length == 0)
+    return FALSE;
 
-guint g_hash_set_size(GHashTable* set);
+  else {
+    GHashTable* head = g_queue_pop_head(unhandled);
 
-void g_hash_set_insert(GHashTable* set, gpointer element);
+    if (g_hash_set_size(head) == 0)
+      return TRUE;
 
-gboolean g_hash_set_contains(GHashTable* set, gpointer element);
+    else {
+      GList* iter = g_hash_set_iterator(clauses);
+      iter = g_list_remove(iter, head);
 
-gboolean g_hash_set_remove(GHashTable* set, gpointer element);
+      for (; iter; iter = iter->next) {
+        // find resolvent
+        // if clauses not contains resolvent add to clauses and unhandled
+      }
 
-void g_hash_set_foreach(GHashTable* set, GFunc func, gpointer user_data);
+      return rec_resol(clauses, unhandled);
+    }
+  }
+}
 
-GList* g_hash_set_iterator(GHashTable* set);
+gboolean resolution(GHashTable* clauses) {
+  GQueue* q = g_queue_new();
+  g_hash_set_foreach(clauses, enqueue, q);
+
+  gboolean result = rec_resol(clauses, q);
+
+  g_queue_free(q);
+
+  return result;
+}
