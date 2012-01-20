@@ -1,4 +1,4 @@
-/* **************************************************************************
+/****************************************************************************
  *                                                                          *
  *  Copyright (C)  2012  Max Brauer, Christian Krause                       *
  *                                                                          *
@@ -34,15 +34,24 @@
 #define OR  "v"
 #define NOT "-"
 
-gchar* g_strreplace(gchar* string, gchar* search, gchar* replace) {
-	return (g_strjoinv (replace, g_strsplit (string, search, -1)));
+void remove_brackets(char* inputstring) {
+  int i;
+  int len = strlen(inputstring);
+  for (i = 0; i <= len; i++) {
+    if(inputstring[i] == '(' ||
+        inputstring[i] == ')'){
+      inputstring[i] = ' ';
+    }
+  }
+  g_print("The string without brackets: %s\n", inputstring);
 }
 
 void get_input_as_clauses() {
-  gchar* inputstring = "Our Inputstring";
+  char inputstring;
   g_print("Please insert a logical statement as conjunctive normal form: ");
   scanf("%s", &inputstring);
   g_print("The inserted string is: %s\n", &inputstring);
+  remove_brackets(&inputstring);  
 }
 
 int main(int argc, char** argv) {
