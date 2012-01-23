@@ -1,4 +1,4 @@
-/****************************************************************************
+/* **************************************************************************
  *                                                                          *
  *  Copyright (C)  2012  Max Brauer, Christian Krause                       *
  *                                                                          *
@@ -25,41 +25,17 @@
  ****************************************************************************/
 
 
-#include <stdio.h>
-#include <string.h>
 #include <glib.h>
-
-#include "resolution.h"
-#include "set.h"
 #include "logic.h"
 
-gchar* strdel(gchar* str, gchar* delim) {
-  return g_strjoinv("", g_strsplit(str, delim, 0)); 
-}
+gchar* literal_negated(const gchar* literal) {
+  gchar* neg_literal = NULL;
 
-void generate_clauses(gchar* conjunctionstring) {
-  gchar** clauseslist;
-  clauseslist = g_strsplit(conjunctionstring, OR, 0);
-  g_strfreev(clauseslist);
-  int i;
-  int len = sizeof(clauseslist);
-  for (i = 0; i < len; i++) {
-    g_print("clauses: %s\n", &clauseslist[i]);
-  }
-}
+  if (g_str_has_prefix(literal, NOT)) {
+    neg_literal = g_strdup(literal);
+    neg_literal++;
+  } else
+    neg_literal = g_strconcat(NOT, literal, NULL);
 
-void get_input_as_clauses() {
-  gchar inputstring[200];
-  gchar* conjunctionstring;
-  g_print("Please insert a logical statement as conjunctive normal form: ");
-  scanf("%s", &inputstring);
-  g_print("The inserted string is: %s\n", &inputstring);
-  conjunctionstring = strdel(strdel(inputstring, "("), ")");
-  g_print("The string without brackets: %s\n", conjunctionstring);
-  generate_clauses(conjunctionstring);
-}
-
-int main(int argc, char** argv) {
-  get_input_as_clauses();
-  return 0;
+  return neg_literal;
 }

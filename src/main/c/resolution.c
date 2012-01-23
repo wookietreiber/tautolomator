@@ -26,10 +26,24 @@
 
 
 #include <glib.h>
+#include "logic.h"
 #include "set.h"
 
 void enqueue(gpointer clause, gpointer unhandled) {
   g_queue_push_tail(unhandled, clause);
+}
+
+void add(gpointer literal, gpointer new_clause) {
+  g_hash_set_insert(new_clause, literal);
+}
+
+GHashTable* join_clauses(GHashTable* clause_a, GHashTable* clause_b) {
+  GHashTable* new_clause = g_hash_set_new(g_str_hash, g_str_equal);
+
+  g_hash_set_foreach(clause_a, add, new_clause);
+  g_hash_set_foreach(clause_b, add, new_clause);
+
+  return new_clause;
 }
 
 gboolean rec_resol(GHashTable* clauses, GQueue* unhandled) {
@@ -43,13 +57,33 @@ gboolean rec_resol(GHashTable* clauses, GQueue* unhandled) {
       return TRUE;
 
     else {
-      GList* iter = g_hash_set_iterator(clauses);
-      iter = g_list_remove(iter, head);
+      GHashTable* new_clauses = g_hash_set_new(g_str_hash, g_str_equal);
 
-      for (; iter; iter = iter->next) {
-        // find resolvent
-        // if clauses not contains resolvent add to clauses and unhandled
+      GList* clause_iterator = g_hash_set_iterator(clauses);
+      clause_iterator = g_list_remove(clause_iterator, head);
+
+      for (; clause_iterator; clause_iterator = clause_iterator->next) {
+        GHashTable* old_clause = clause_iterator->data;
+
+        GList* literal_iterator = g_hash_set_iterator(head);
+
+        for (; literal_iterator; literal_iterator = literal_iterator->next) {
+          gchar*     literal = literal_iterator->data;
+          gchar* neg_literal = literal_negated(literal);
+
+          if (g_hash_set_contains(old_clause, neg_literal)) {
+            GHashTable* new_clause = join_clauses(head, old_clause);
+
+            g_hash_set_remove(new_clause, literal);
+            g_hash_set_remove(new_clause, neg_literal);
+
+            if ( ! g_hash_set_contains(clauses, new_clause) )
+              g_hash_set_insert(new_clauses, new_clause);
+          }
+        }
       }
+
+      g_hash_set_foreach(new_clauses, enqueue, unhandled);
 
       return rec_resol(clauses, unhandled);
     }
@@ -57,12 +91,12 @@ gboolean rec_resol(GHashTable* clauses, GQueue* unhandled) {
 }
 
 gboolean resolution(GHashTable* clauses) {
-  GQueue* q = g_queue_new();
-  g_hash_set_foreach(clauses, enqueue, q);
+  GQueue* unhandled = g_queue_new();
+  g_hash_set_foreach(clauses, enqueue, unhandled);
 
-  gboolean result = rec_resol(clauses, q);
+  gboolean result = rec_resol(clauses, unhandled);
 
-  g_queue_free(q);
+  g_queue_free(unhandled);
 
   return result;
 }
