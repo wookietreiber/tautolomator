@@ -25,16 +25,15 @@
  ****************************************************************************/
 
 
-#include <stdio.h>
-#include <string.h>
 #include <glib.h>
+#include <glib/gstdio.h>
 
 #include "resolution.h"
 #include "set.h"
 #include "logic.h"
 
 gchar* strdel(gchar* str, gchar* delim) {
-  return g_strjoinv("", g_strsplit(str, delim, 0)); 
+  return g_strjoinv("", g_strsplit(str, delim, 0));
 }
 
 void generate_clauses(gchar* conjunctionstring) {
@@ -44,18 +43,56 @@ void generate_clauses(gchar* conjunctionstring) {
   //GHashTable* clausesset = g_hash_set_new();
 }
 
-void get_input_as_clauses() {
-  gchar inputstring[200];
-  gchar* conjunctionstring;
-  g_print("Please insert a logical statement as conjunctive normal form: ");
-  scanf("%200s", inputstring);
-  g_print("The inserted string is: %200s\n", inputstring);
-  conjunctionstring = strdel(strdel(inputstring, "("), ")");
-  g_print("The string without brackets: %s\n", conjunctionstring);
-  generate_clauses(conjunctionstring);
-}
-
 int main(int argc, char** argv) {
-  get_input_as_clauses();
+  GError* error = NULL;
+
+  gchar* input;
+  gchar* input_string   = NULL;
+  gchar* input_filename = NULL;
+
+  GOptionEntry command_line_options[] = {
+    { "input", 'i', 0, G_OPTION_ARG_STRING,   &input_string,   "read expression from string", "expression"          },
+    { "file",  'f', 0, G_OPTION_ARG_FILENAME, &input_filename, "read expression from file",   "/path/to/input-file" },
+    { NULL }
+  };
+
+  GOptionContext* context = g_option_context_new(
+    "- test whether an expression is a tautology");
+
+  g_option_context_add_main_entries(context, command_line_options, NULL);
+
+  if (!g_option_context_parse(context, &argc, &argv, &error)) {
+    g_print("%s\n", error->message);
+    return 1;
+  }
+  g_clear_error(&error);
+
+  if (input_string == NULL && input_filename == NULL) {
+    GString* string = g_string_new("");
+
+    g_print("Please input a logical expression: ");
+
+    char c;
+    while ((c = getchar()) != '\n') {
+      g_string_append_c(string, c);
+    }
+
+    input = string->str;
+  } else if (input_string == NULL) {
+    if (!g_file_get_contents(input_filename, &input, NULL, &error)) {
+      g_print("%s\n", error->message);
+      return 1;
+    }
+    g_clear_error(&error);
+  } else {
+    input = input_string;
+  }
+
+  input = g_strstrip(input);
+
+  // TODO convert raw input to set
+
+  g_option_context_free(context);
+
   return 0;
 }
