@@ -39,14 +39,26 @@ gchar* strdel(gchar* str, gchar* delim) {
   return g_strjoinv("", g_strsplit(str, delim, 0)); 
 }
 
+void generate_clauses(gchar* conjunctionstring) {
+  gchar** clauseslist;
+  clauseslist = g_strsplit(conjunctionstring, OR, 0);
+  g_strfreev(clauseslist);
+  int i;
+  int len = sizeof(clauseslist);
+  for (i = 0; i < len; i++) {
+    g_print("clauses: %s\n", &clauseslist[i]);
+  }
+}
+
 void get_input_as_clauses() {
   gchar inputstring[200];
-  gchar* clauselstring;
+  gchar* conjunctionstring;
   g_print("Please insert a logical statement as conjunctive normal form: ");
   scanf("%s", &inputstring);
   g_print("The inserted string is: %s\n", &inputstring);
-  clauselstring = strdel(strdel(inputstring, "("), ")");
-  g_print("%s\n", clauselstring);
+  conjunctionstring = strdel(strdel(inputstring, "("), ")");
+  g_print("The String without brackets: %s\n", conjunctionstring);
+  generate_clauses(conjunctionstring);
 }
 
 int main(int argc, char** argv) {
