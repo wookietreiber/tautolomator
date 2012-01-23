@@ -35,24 +35,18 @@
 #define OR  "v"
 #define NOT "-"
 
-void remove_brackets(char* inputstring) {
-  int i;
-  int len = strlen(inputstring);
-  for (i = 0; i <= len; i++) {
-    if(inputstring[i] == '(' ||
-        inputstring[i] == ')'){
-      inputstring[i] = ' ';
-    }
-  }
-  g_print("The string without brackets: %s\n", inputstring);
+gchar* strdel(gchar* str, gchar* delim) {
+  return g_strjoinv("", g_strsplit(str, delim, 0)); 
 }
 
 void get_input_as_clauses() {
-  char inputstring;
+  gchar inputstring[200];
+  gchar* clauselstring;
   g_print("Please insert a logical statement as conjunctive normal form: ");
   scanf("%s", &inputstring);
   g_print("The inserted string is: %s\n", &inputstring);
-  remove_brackets(&inputstring);  
+  clauselstring = strdel(strdel(inputstring, "("), ")");
+  g_print("%s\n", clauselstring);
 }
 
 int main(int argc, char** argv) {
