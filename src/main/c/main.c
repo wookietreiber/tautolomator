@@ -41,19 +41,15 @@ void generate_clauses(gchar* conjunctionstring) {
   gchar** clauseslist;
   clauseslist = g_strsplit(conjunctionstring, OR, 0);
   g_strfreev(clauseslist);
-  int i;
-  int len = sizeof(clauseslist);
-  for (i = 0; i < len; i++) {
-    g_print("clauses: %s\n", &clauseslist[i]);
-  }
+  //GHashTable* clausesset = g_hash_set_new();
 }
 
 void get_input_as_clauses() {
   gchar inputstring[200];
   gchar* conjunctionstring;
   g_print("Please insert a logical statement as conjunctive normal form: ");
-  scanf("%s", &inputstring);
-  g_print("The inserted string is: %s\n", &inputstring);
+  scanf("%200s", inputstring);
+  g_print("The inserted string is: %200s\n", inputstring);
   conjunctionstring = strdel(strdel(inputstring, "("), ")");
   g_print("The string without brackets: %s\n", conjunctionstring);
   generate_clauses(conjunctionstring);
