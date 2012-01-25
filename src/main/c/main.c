@@ -36,11 +36,23 @@ gchar* strdel(gchar* str, gchar* delim) {
   return g_strjoinv("", g_strsplit(str, delim, 0));
 }
 
-void generate_clauses(gchar* conjunctionstring) {
+GHashTable* generate_clauses(gchar* conjunctionstring) {
   gchar** clauseslist;
-  clauseslist = g_strsplit(conjunctionstring, OR, 0);
-  g_strfreev(clauseslist);
-  //ToDo: Handle the list of the Stringt ...
+  conjunctionstring = strdel(strdel(conjunctionstring, "("), ")");
+  clauseslist = g_strsplit(conjunctionstring, OR, -1);
+  int i;
+  GHashTable* conjunction = g_hash_set_new(g_str_hash, g_str_equal);
+  for (i = 0; clauseslist[i] != NULL; i++) {
+    gchar** literallist;
+    literallist = g_strsplit(clauseslist[i], AND, -1);
+    int j;
+    GHashTable* clause = g_hash_set_new(g_str_hash, g_str_equal);
+    for (j = 0; literallist[j] != NULL; j++) {
+      g_hash_set_insert(clause, literallist[j]);
+    }
+    g_hash_set_insert(conjunction, clause);
+  }
+  return conjunction;
 }
 
 int main(int argc, char** argv) {
@@ -91,6 +103,7 @@ int main(int argc, char** argv) {
   input = g_strstrip(input);
 
   // TODO convert raw input to set
+  GHashTable* conjunction = generate_clauses(input);
 
   g_option_context_free(context);
 
