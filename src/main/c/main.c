@@ -103,7 +103,7 @@ int main(int argc, char** argv) {
   input = g_strstrip(input);
 
   // TODO convert raw input to set
-  GHashTable* conjunction = generate_clauses(input);
+  g_print("%d\n", resolution(generate_clauses(input)));
 
   g_option_context_free(context);
 
