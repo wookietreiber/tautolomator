@@ -41,7 +41,7 @@ GHashTable* generate_clauses(gchar* conjunctionstring) {
   conjunctionstring = strdel(strdel(conjunctionstring, "("), ")");
   clauseslist = g_strsplit(conjunctionstring, OR, -1);
   int i;
-  GHashTable* conjunction = g_hash_set_new(g_str_hash, g_str_equal);
+  GHashTable* conjunction = g_hash_set_new(g_direct_hash, g_direct_equal);
   for (i = 0; clauseslist[i] != NULL; i++) {
     gchar** literallist;
     literallist = g_strsplit(clauseslist[i], AND, -1);
