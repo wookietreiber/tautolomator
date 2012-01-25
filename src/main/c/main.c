@@ -33,10 +33,23 @@
 #include "logic.h"
 
 gchar* strdel(gchar* str, gchar* delim) {
+  /*
+   * This function just deletes substrings out of a string. It's needed to
+   * remove brackets out of the input.
+   */
   return g_strjoinv("", g_strsplit(str, delim, 0));
 }
 
 GHashTable* generate_clauses(gchar* conjunctionstring) {
+  /*
+   * Takes the Inputstring and generates a Set of Sets (in the form of
+   * a GHashTable of GHashTables).
+   *
+   * To do this, the inputstring is first splited at the 'OR' Symbol.
+   * After that, the function iterates over the gchar array of gchar strings
+   * and split them at the 'AND' Symbol. After that, the Sets are created
+   * and returned.
+   */
   gchar** clauseslist;
   conjunctionstring = strdel(strdel(conjunctionstring, "("), ")");
   clauseslist = g_strsplit(conjunctionstring, OR, -1);
@@ -63,8 +76,10 @@ int main(int argc, char** argv) {
   gchar* input_filename = NULL;
 
   GOptionEntry command_line_options[] = {
-    { "input", 'i', 0, G_OPTION_ARG_STRING,   &input_string,   "read expression from string", "expression"          },
-    { "file",  'f', 0, G_OPTION_ARG_FILENAME, &input_filename, "read expression from file",   "/path/to/input-file" },
+    { "input", 'i', 0, G_OPTION_ARG_STRING,   &input_string,   
+      "read expression from string", "expression" },
+    { "file",  'f', 0, G_OPTION_ARG_FILENAME, &input_filename, 
+      "read expression from file",   "/path/to/input-file" },
     { NULL }
   };
 
