@@ -14,16 +14,16 @@ project (tautolomator)
 set(SRCDIR "${CMAKE_CURRENT_SOURCE_DIR}/src/main/c")
 
 set(TAUTOLOMATOR_SRCS
-  ${SRCDIR}/main.c
+  ${SRCDIR}/gset.c
   ${SRCDIR}/logic.c
   ${SRCDIR}/resolution.c
-  ${SRCDIR}/set.c
+  ${SRCDIR}/main.c
 )
 
 set(TAUTOLOMATOR_H
+  ${SRCDIR}/gset.h
   ${SRCDIR}/logic.h
   ${SRCDIR}/resolution.h
-  ${SRCDIR}/set.h
 )
 
   # -----------------------------------------------------------------

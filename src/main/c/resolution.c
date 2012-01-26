@@ -26,8 +26,9 @@
 
 
 #include <glib.h>
+
+#include "gset.h"
 #include "logic.h"
-#include "set.h"
 
 void enqueue(gpointer clause, gpointer unhandled) {
   g_queue_push_tail(unhandled, clause);

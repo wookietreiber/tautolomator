@@ -28,9 +28,9 @@
 #include <glib.h>
 #include <glib/gstdio.h>
 
-#include "resolution.h"
-#include "set.h"
+#include "gset.h"
 #include "logic.h"
+#include "resolution.h"
 
 gchar* strdel(gchar* str, gchar* delim) {
   /*

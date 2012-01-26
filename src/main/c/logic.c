@@ -26,6 +26,7 @@
 
 
 #include <glib.h>
+
 #include "logic.h"
 
 gchar* literal_negated(const gchar* literal) {

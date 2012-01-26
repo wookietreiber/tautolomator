@@ -27,18 +27,34 @@
 
 #include <glib.h>
 
-GHashTable* g_hash_set_new(GHashFunc hash_func, GEqualFunc equal_func);
+/** Returns a new hash set. */
+GHashTable*   g_hash_set_new           (GHashFunc       hash_func,
+                                        GEqualFunc      equal_func);
 
-GHashTable* g_hash_set_new_full(GHashFunc hash_func, GEqualFunc equal_func, GDestroyNotify destroy);
+/** Returns a new hash set. */
+GHashTable*   g_hash_set_new_full      (GHashFunc       hash_func,
+                                        GEqualFunc      equal_func,
+                                        GDestroyNotify  destroy_func);
 
-guint g_hash_set_size(GHashTable* set);
+/** Returns the size of the hash set. */
+guint         g_hash_set_size          (GHashTable*     set);
 
-void g_hash_set_insert(GHashTable* set, gpointer element);
+/** Inserts the element into the hash set. */
+void          g_hash_set_insert        (GHashTable*     set,
+                                        gpointer        element);
 
-gboolean g_hash_set_contains(GHashTable* set, gpointer element);
+/** Returns TRUE if the hash set contains the given element. */
+gboolean      g_hash_set_contains      (GHashTable*     set,
+                                        gpointer        element);
 
-gboolean g_hash_set_remove(GHashTable* set, gpointer element);
+/** Returns TRUE if the given element has been found and removed. */
+gboolean      g_hash_set_remove        (GHashTable*     set,
+                                        gpointer        element);
 
-void g_hash_set_foreach(GHashTable* set, GFunc func, gpointer user_data);
+/** Calls the given function for every element of the hash set. */
+void          g_hash_set_foreach       (GHashTable*     set,
+                                        GFunc           func,
+                                        gpointer        user_data);
 
-GList* g_hash_set_iterator(GHashTable* set);
+/** Returns an iterator over all elements of the hash set. */
+GList*        g_hash_set_iterator      (GHashTable*     set);
