@@ -75,9 +75,9 @@ int main(int argc, char** argv) {
   gchar* input_filename = NULL;
 
   GOptionEntry command_line_options[] = {
-    { "input", 'i', 0, G_OPTION_ARG_STRING,   &input_string,   
+    { "input", 'i', 0, G_OPTION_ARG_STRING,   &input_string,
       "read expression from string", "expression" },
-    { "file",  'f', 0, G_OPTION_ARG_FILENAME, &input_filename, 
+    { "file",  'f', 0, G_OPTION_ARG_FILENAME, &input_filename,
       "read expression from file",   "/path/to/input-file" },
     { NULL }
   };
