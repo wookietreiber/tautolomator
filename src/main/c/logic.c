@@ -46,21 +46,22 @@ gchar* negate_literal(const gchar* literal) {
   return negated_literal;
 }
 
-static void enqueue(gpointer clause, gpointer unhandled) {
-  g_queue_push_tail(unhandled, clause);
+/** Enqueues the element into a queue.
+  *
+  * @element: element to enqueue
+  * @queue:   a queue
+  */
+static void enqueue(gpointer element, gpointer queue) {
+  g_queue_push_tail(queue, element);
 }
 
-static void add(gpointer literal, gpointer new_clause) {
-  g_hash_set_insert(new_clause, literal);
-}
-
-static GHashTable* join_clauses(GHashTable* clause_a, GHashTable* clause_b) {
-  GHashTable* new_clause = g_hash_set_new(g_str_hash, g_str_equal);
-
-  g_hash_set_foreach(clause_a, add, new_clause);
-  g_hash_set_foreach(clause_b, add, new_clause);
-
-  return new_clause;
+/** Inserts the element into a hash set.
+  *
+  * @element:  element to insert
+  * @hash_set: a hash set
+  */
+static void insert(gpointer element, gpointer hash_set) {
+  g_hash_set_insert(hash_set, element);
 }
 
 static gboolean rec_resol(GHashTable* clauses, GQueue* unhandled) {
@@ -89,7 +90,10 @@ static gboolean rec_resol(GHashTable* clauses, GQueue* unhandled) {
           gchar* neg_literal = negate_literal(literal);
 
           if (g_hash_set_contains(old_clause, neg_literal)) {
-            GHashTable* new_clause = join_clauses(head, old_clause);
+            GHashTable* new_clause = g_hash_set_new(g_str_hash, g_str_equal);
+
+            g_hash_set_foreach(head,       insert, new_clause);
+            g_hash_set_foreach(old_clause, insert, new_clause);
 
             g_hash_set_remove(new_clause, literal);
             g_hash_set_remove(new_clause, neg_literal);
