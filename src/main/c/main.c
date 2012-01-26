@@ -29,43 +29,8 @@
 #include <glib/gstdio.h>
 
 #include "gset.h"
+#include "parsing.h"
 #include "logic.h"
-
-gchar* strdel(gchar* str, gchar* delim) {
-  /*
-   * This function just deletes substrings out of a string. It's needed to
-   * remove brackets out of the input.
-   */
-  return g_strjoinv("", g_strsplit(str, delim, 0));
-}
-
-GHashTable* generate_clauses(gchar* conjunctionstring) {
-  /*
-   * Takes the Inputstring and generates a Set of Sets (in the form of
-   * a GHashTable of GHashTables).
-   *
-   * To do this, the inputstring is first splited at the 'OR' Symbol.
-   * After that, the function iterates over the gchar array of gchar strings
-   * and split them at the 'AND' Symbol. After that, the Sets are created
-   * and returned.
-   */
-  gchar** clauseslist;
-  conjunctionstring = strdel(strdel(conjunctionstring, "("), ")");
-  clauseslist = g_strsplit(conjunctionstring, OR, -1);
-  int i;
-  GHashTable* conjunction = g_hash_set_new(g_direct_hash, g_direct_equal);
-  for (i = 0; clauseslist[i] != NULL; i++) {
-    gchar** literallist;
-    literallist = g_strsplit(clauseslist[i], AND, -1);
-    int j;
-    GHashTable* clause = g_hash_set_new(g_str_hash, g_str_equal);
-    for (j = 0; literallist[j] != NULL; j++) {
-      g_hash_set_insert(clause, literallist[j]);
-    }
-    g_hash_set_insert(conjunction, clause);
-  }
-  return conjunction;
-}
 
 int main(int argc, char** argv) {
   GError* error = NULL;
@@ -116,8 +81,10 @@ int main(int argc, char** argv) {
 
   input = g_strstrip(input);
 
-  // TODO convert raw input to set
-  g_print("%d\n", resolution(generate_clauses(input)));
+  if (is_satisfiable_by_resolution(cnf_to_clauses(input)) == TRUE)
+    g_print("Expression is satisfiable.\n");
+  else
+    g_print("Expression is not satisfiable.\n");
 
   g_option_context_free(context);
 
