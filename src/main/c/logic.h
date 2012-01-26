@@ -31,4 +31,5 @@
 #define OR  "v"
 #define NOT "-"
 
-gchar* literal_negated(const gchar* literal);
+/** Returns a new string containing the negated literal. */
+gchar*        negate_literal           (const gchar*    literal);

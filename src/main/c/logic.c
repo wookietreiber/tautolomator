@@ -29,14 +29,18 @@
 
 #include "logic.h"
 
-gchar* literal_negated(const gchar* literal) {
-  gchar* neg_literal = NULL;
+/** Returns a new string containing the negated literal.
+  *
+  * @literal: the literal to negate
+  */
+gchar* negate_literal(const gchar* literal) {
+  gchar* negated_literal = NULL;
 
   if (g_str_has_prefix(literal, NOT)) {
-    neg_literal = g_strdup(literal);
-    neg_literal++;
+    negated_literal = g_strdup(literal);
+    negated_literal++;
   } else
-    neg_literal = g_strconcat(NOT, literal, NULL);
+    negated_literal = g_strconcat(NOT, literal, NULL);
 
-  return neg_literal;
+  return negated_literal;
 }

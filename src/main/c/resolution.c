@@ -70,7 +70,7 @@ gboolean rec_resol(GHashTable* clauses, GQueue* unhandled) {
 
         for (; literal_iterator; literal_iterator = literal_iterator->next) {
           gchar*     literal = literal_iterator->data;
-          gchar* neg_literal = literal_negated(literal);
+          gchar* neg_literal = negate_literal(literal);
 
           if (g_hash_set_contains(old_clause, neg_literal)) {
             GHashTable* new_clause = join_clauses(head, old_clause);
