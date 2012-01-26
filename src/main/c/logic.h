@@ -33,3 +33,5 @@
 
 /** Returns a new string containing the negated literal. */
 gchar*        negate_literal           (const gchar*    literal);
+
+gboolean      resolution               (GHashTable*     clauses);

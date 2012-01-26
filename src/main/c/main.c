@@ -30,7 +30,6 @@
 
 #include "gset.h"
 #include "logic.h"
-#include "resolution.h"
 
 gchar* strdel(gchar* str, gchar* delim) {
   /*
