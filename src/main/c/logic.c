@@ -46,15 +46,15 @@ gchar* negate_literal(const gchar* literal) {
   return negated_literal;
 }
 
-void enqueue(gpointer clause, gpointer unhandled) {
+static void enqueue(gpointer clause, gpointer unhandled) {
   g_queue_push_tail(unhandled, clause);
 }
 
-void add(gpointer literal, gpointer new_clause) {
+static void add(gpointer literal, gpointer new_clause) {
   g_hash_set_insert(new_clause, literal);
 }
 
-GHashTable* join_clauses(GHashTable* clause_a, GHashTable* clause_b) {
+static GHashTable* join_clauses(GHashTable* clause_a, GHashTable* clause_b) {
   GHashTable* new_clause = g_hash_set_new(g_str_hash, g_str_equal);
 
   g_hash_set_foreach(clause_a, add, new_clause);
@@ -63,7 +63,7 @@ GHashTable* join_clauses(GHashTable* clause_a, GHashTable* clause_b) {
   return new_clause;
 }
 
-gboolean rec_resol(GHashTable* clauses, GQueue* unhandled) {
+static gboolean rec_resol(GHashTable* clauses, GQueue* unhandled) {
   if (unhandled->length == 0)
     return FALSE;
 
