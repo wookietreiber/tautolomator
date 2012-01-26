@@ -37,24 +37,24 @@ GHashTable*   g_hash_set_new_full      (GHashFunc       hash_func,
                                         GDestroyNotify  destroy_func);
 
 /** Returns the size of the hash set. */
-guint         g_hash_set_size          (GHashTable*     set);
+guint         g_hash_set_size          (GHashTable*     hash_set);
 
 /** Inserts the element into the hash set. */
-void          g_hash_set_insert        (GHashTable*     set,
+void          g_hash_set_insert        (GHashTable*     hash_set,
                                         gpointer        element);
 
 /** Returns TRUE if the hash set contains the given element. */
-gboolean      g_hash_set_contains      (GHashTable*     set,
+gboolean      g_hash_set_contains      (GHashTable*     hash_set,
                                         gpointer        element);
 
 /** Returns TRUE if the given element has been found and removed. */
-gboolean      g_hash_set_remove        (GHashTable*     set,
+gboolean      g_hash_set_remove        (GHashTable*     hash_set,
                                         gpointer        element);
 
 /** Calls the given function for every element of the hash set. */
-void          g_hash_set_foreach       (GHashTable*     set,
+void          g_hash_set_foreach       (GHashTable*     hash_set,
                                         GFunc           func,
                                         gpointer        user_data);
 
 /** Returns an iterator over all elements of the hash set. */
-GList*        g_hash_set_iterator      (GHashTable*     set);
+GList*        g_hash_set_iterator      (GHashTable*     hash_set);
