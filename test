@@ -1,0 +1,4 @@
+./tautolomator -i "(AvB)^(-A)^(-B)"
+./tautolomator -i "(AvB)^(-Av-B)^(-AvB)^(Av-B)"
+./tautolomator -i "(AvB)^(-Av-B)"
+./tautolomator -i "(-AvB)^(-BvC)^(AvBvC)^(Av-C)^(-Av-Bv-C)"

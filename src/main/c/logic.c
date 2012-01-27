@@ -122,10 +122,6 @@ static void insert(gpointer element, gpointer hash_set) {
   g_hash_set_insert(hash_set, element);
 }
 
-// TODO fix "(AvB)^(-Av-B)" maybe by:
-// TODO   { -B,-A } and { A,-A } with -A results in { -A,-B } instead of { -B }
-// TODO   i.e. leaving the -A in the second clause
-// TODO     by first removing the literals and then joining the sets
 static gboolean rec_resol(GHashTable* clauses, GQueue* unhandled_clauses) {
   if (unhandled_clauses->length == 0)
     return TRUE;
@@ -133,7 +129,7 @@ static gboolean rec_resol(GHashTable* clauses, GQueue* unhandled_clauses) {
   else {
     GHashTable* unhandled_clause = g_queue_pop_head(unhandled_clauses);
 
-    g_print("handling: %s\n", clause_to_string(unhandled_clause));
+    g_print("  handling: %s\n", clause_to_string(unhandled_clause));
 
     GHashTable* new_clauses = g_hash_set_new((GHashFunc)clause_hash, (GEqualFunc)clause_equal);
 
@@ -150,18 +146,24 @@ static gboolean rec_resol(GHashTable* clauses, GQueue* unhandled_clauses) {
         gchar* neg_literal = negate_literal(literal);
 
         if (g_hash_set_contains(old_clause, neg_literal)) {
+          GHashTable* new_clause_a = g_hash_set_new(g_str_hash, g_str_equal);
+          GHashTable* new_clause_b = g_hash_set_new(g_str_hash, g_str_equal);
+
+          g_hash_set_foreach(unhandled_clause, insert, new_clause_a);
+          g_hash_set_foreach(      old_clause, insert, new_clause_b);
+
+          g_hash_set_remove(new_clause_a,     literal);
+          g_hash_set_remove(new_clause_b, neg_literal);
+
           GHashTable* new_clause = g_hash_set_new(g_str_hash, g_str_equal);
 
-          g_hash_set_foreach(unhandled_clause, insert, new_clause);
-          g_hash_set_foreach(old_clause,       insert, new_clause);
-
-          g_hash_set_remove(new_clause, literal);
-          g_hash_set_remove(new_clause, neg_literal);
+          g_hash_set_foreach(new_clause_a, insert, new_clause);
+          g_hash_set_foreach(new_clause_b, insert, new_clause);
 
           if ((!g_hash_set_contains(clauses,     new_clause)) &&
               (!g_hash_set_contains(new_clauses, new_clause))) {
 
-            g_print("  ... and %s with literal %s -> %s\n",
+            g_print("    ... and %s with literal %s -> %s\n",
               clause_to_string(old_clause),
               literal,
               clause_to_string(new_clause)
