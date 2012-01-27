@@ -31,37 +31,8 @@
 #include "logic.h"
 #include "utils.h"
 
-/** Returns a hash value corresponding to the given clause.
-  *
-  * @clause: clause from which to create the hash value
-  */
-guint clause_hash(GHashTable* clause) {
-  guint hash = 0;
-
-  GList* literal_iterator = g_hash_set_iterator(clause);
-  for (; literal_iterator; literal_iterator = literal_iterator->next) {
-    gchar* literal = literal_iterator->data;
-
-    if (g_str_has_prefix(literal, NOT))
-      hash = hash + g_str_hash(literal)*42;
-    else
-      hash = hash + g_str_hash(literal);
-  }
-
-  return hash;
-}
-
 gint compare_by_size(GHashTable* clause_a, GHashTable* clause_b, gpointer user_data) {
   return g_hash_set_size(clause_a) - g_hash_set_size(clause_b);
-}
-
-/** Returns TRUE if the two clauses match.
-  *
-  * @clause_a: a clause
-  * @clause_b: another clause
-  */
-gboolean clause_equal(GHashTable* clause_a, GHashTable* clause_b) {
-  return clause_hash(clause_a) == clause_hash(clause_b);
 }
 
 /** Returns a new string containing the negated literal.

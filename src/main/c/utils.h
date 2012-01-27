@@ -26,21 +26,32 @@
 
 
 /** Returns a new string stripped of all occurrences of the delimiter. */
-gchar*        strdel                   (gchar*          str,
-                                        gchar*          delim);
+gchar*        strdel                         (gchar*          str,
+                                              gchar*          delim);
 
 /** Returns a set of literals parsed from the given string. */
-GHashTable*   disjunction_to_clause    (gchar*          string);
+GHashTable*   disjunction_to_clause          (gchar*          string);
 
 /** Returns a set of clauses parsed from the given string. */
-GHashTable*   cnf_to_clauses           (gchar*          input);
+GHashTable*   cnf_to_clauses                 (gchar*          input);
+
+  // -----------------------------------------------------------------------
+  // hash functions
+  // -----------------------------------------------------------------------
+
+/** Returns a hash value corresponding to the given clause. */
+guint         clause_hash                    (GHashTable*     clause);
+
+/** Returns TRUE if the two clauses match. */
+gboolean      clause_equal                   (GHashTable*     clause_a,
+                                              GHashTable*     clause_b);
 
   // -----------------------------------------------------------------------
   // to string functions
   // -----------------------------------------------------------------------
 
 /** Returns the string representation of the clause. */
-gchar*        clause_to_string         (GHashTable*     clause);
+gchar*        clause_to_string               (GHashTable*     clause);
 
 /** Returns the string representation of the set of clauses. */
-gchar*        clauses_to_string        (GHashTable*     clauses);
+gchar*        clauses_to_string              (GHashTable*     clauses);

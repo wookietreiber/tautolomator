@@ -34,12 +34,5 @@
 /** Returns a new string containing the negated literal. */
 gchar*        negate_literal                 (const gchar*    literal);
 
-/** Returns a hash value corresponding to the given clause. */
-guint         clause_hash                    (GHashTable*     clause);
-
-/** Returns TRUE if the two clauses match. */
-gboolean      clause_equal                   (GHashTable*     clause_a,
-                                              GHashTable*     clause_b);
-
 /** Returns TRUE if the CNF is satisfiable using resolution. */
 gboolean      is_satisfiable_by_resolution   (GHashTable*     clauses);
