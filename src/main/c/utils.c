@@ -76,3 +76,43 @@ GHashTable* cnf_to_clauses(gchar* input) {
 
   return clauses;
 }
+
+  // -----------------------------------------------------------------------
+  // to string functions
+  // -----------------------------------------------------------------------
+
+/** Returns the string representation of the clause.
+  *
+  * @clause: a clause
+  */
+gchar* clause_to_string(GHashTable* clause) {
+  GString* string = g_string_new("{ ");
+
+  GList* literal_iterator = g_hash_set_iterator(clause);
+  for (; literal_iterator; literal_iterator = literal_iterator->next) {
+    g_string_append(string, literal_iterator->data);
+    g_string_append_c(string, ',');
+  }
+  g_string_truncate(string, string->len - 1);
+  g_string_append(string, " }");
+
+  return g_string_free(string, FALSE);
+}
+
+/** Returns the string representation of the set of clauses.
+  *
+  * @clauses: a set of clauses
+  */
+gchar* clauses_to_string(GHashTable* clauses) {
+  GString* string = g_string_new("{ ");
+
+  GList* clause_iterator = g_hash_set_iterator(clauses);
+  for (; clause_iterator; clause_iterator = clause_iterator->next) {
+    g_string_append(string, clause_to_string(clause_iterator->data));
+    g_string_append_c(string, ',');
+  }
+  g_string_truncate(string, string->len - 1);
+  g_string_append(string, " }");
+
+  return g_string_free(string, FALSE);
+}

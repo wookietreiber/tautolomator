@@ -34,3 +34,13 @@ GHashTable*   disjunction_to_clause    (gchar*          string);
 
 /** Returns a set of clauses parsed from the given string. */
 GHashTable*   cnf_to_clauses           (gchar*          input);
+
+  // -----------------------------------------------------------------------
+  // to string functions
+  // -----------------------------------------------------------------------
+
+/** Returns the string representation of the clause. */
+gchar*        clause_to_string         (GHashTable*     clause);
+
+/** Returns the string representation of the set of clauses. */
+gchar*        clauses_to_string        (GHashTable*     clauses);

@@ -29,35 +29,7 @@
 
 #include "gset.h"
 #include "logic.h"
-
-/** Returns the string representation of the clause. */
-gchar* clause_to_string(GHashTable* clause) {
-  GString* string = g_string_new("{ ");
-
-  GList* literal_iterator = g_hash_set_iterator(clause);
-  for (; literal_iterator; literal_iterator = literal_iterator->next) {
-    g_string_append(string, literal_iterator->data);
-    g_string_append_c(string, ',');
-  }
-  g_string_truncate(string, string->len - 1);
-  g_string_append(string, " }");
-
-  return g_string_free(string, FALSE);
-}
-
-gchar* clauses_to_string(GHashTable* clauses) {
-  GString* string = g_string_new("{ ");
-
-  GList* clause_iterator = g_hash_set_iterator(clauses);
-  for (; clause_iterator; clause_iterator = clause_iterator->next) {
-    g_string_append(string, clause_to_string(clause_iterator->data));
-    g_string_append_c(string, ',');
-  }
-  g_string_truncate(string, string->len - 1);
-  g_string_append(string, " }");
-
-  return g_string_free(string, FALSE);
-}
+#include "utils.h"
 
 /** Returns a hash value corresponding to the given clause.
   *
