@@ -33,17 +33,21 @@
 #include "logic.h"
 
 int main(int argc, char** argv) {
-  GError* error = NULL;
 
-  gchar* input;
-  gchar* input_string   = NULL;
-  gchar* input_filename = NULL;
+  // -----------------------------------------------------------------------
+  // fetch command line arguments
+  // -----------------------------------------------------------------------
+
+  GError* err = NULL;
+
+  gchar* expression = NULL;
+  gchar* filename   = NULL;
 
   GOptionEntry command_line_options[] = {
-    { "input", 'i', 0, G_OPTION_ARG_STRING,   &input_string,
+    { "input", 'i', 0, G_OPTION_ARG_STRING,   &expression,
       "read expression from string", "expression" },
-    { "file",  'f', 0, G_OPTION_ARG_FILENAME, &input_filename,
-      "read expression from file",   "/path/to/input-file" },
+    { "file",  'f', 0, G_OPTION_ARG_FILENAME, &filename,
+      "read expression from file",   "/path/to/expression-file" },
     { NULL }
   };
 
@@ -52,13 +56,18 @@ int main(int argc, char** argv) {
 
   g_option_context_add_main_entries(context, command_line_options, NULL);
 
-  if (!g_option_context_parse(context, &argc, &argv, &error)) {
-    g_print("%s\n", error->message);
+  if (!g_option_context_parse(context, &argc, &argv, &err)) {
+    g_print("%s\n", err->message);
     return 1;
   }
-  g_clear_error(&error);
+  g_clear_error(&err);
 
-  if (input_string == NULL && input_filename == NULL) {
+  // -----------------------------------------------------------------------
+  // parse command line arguments
+  // -----------------------------------------------------------------------
+
+  if (expression == NULL && filename == NULL) {
+    // no arguments -> fetch from stdin
     GString* string = g_string_new("");
 
     g_print("Please input a logical expression: ");
@@ -68,20 +77,23 @@ int main(int argc, char** argv) {
       g_string_append_c(string, c);
     }
 
-    input = string->str;
-  } else if (input_string == NULL) {
-    if (!g_file_get_contents(input_filename, &input, NULL, &error)) {
-      g_print("%s\n", error->message);
+    expression = string->str;
+  } else if (expression == NULL) {
+    // fetch expression from file
+    if (!g_file_get_contents(filename, &expression, NULL, &err)) {
+      g_print("%s\n", err->message);
       return 1;
     }
-    g_clear_error(&error);
-  } else {
-    input = input_string;
+    g_clear_error(&err);
   }
 
-  input = g_strstrip(input);
+  expression = g_strstrip(expression);
 
-  if (is_satisfiable_by_resolution(cnf_to_clauses(input)) == TRUE)
+  // -----------------------------------------------------------------------
+  // execute algorithm and print solution
+  // -----------------------------------------------------------------------
+
+  if (is_satisfiable_by_resolution(cnf_to_clauses(expression)) == TRUE)
     g_print("Expression is satisfiable.\n");
   else
     g_print("Expression is not satisfiable.\n");
