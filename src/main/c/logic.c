@@ -79,6 +79,10 @@ guint clause_hash(GHashTable* clause) {
   return hash;
 }
 
+gint compare_by_size(GHashTable* clause_a, GHashTable* clause_b, gpointer user_data) {
+  return g_hash_set_size(clause_a) - g_hash_set_size(clause_b);
+}
+
 /** Returns TRUE if the two clauses match.
   *
   * @clause_a: a clause
@@ -123,6 +127,8 @@ static void insert(gpointer element, gpointer hash_set) {
 }
 
 static gboolean rec_resol(GHashTable* clauses, GQueue* unhandled_clauses) {
+  g_queue_sort(unhandled_clauses, (GCompareDataFunc)compare_by_size, NULL);
+
   if (unhandled_clauses->length == 0)
     return TRUE;
 
