@@ -31,10 +31,6 @@
 #include "logic.h"
 #include "utils.h"
 
-gint compare_by_size(GHashTable* clause_a, GHashTable* clause_b, gpointer user_data) {
-  return g_hash_set_size(clause_a) - g_hash_set_size(clause_b);
-}
-
 /** Returns a new string containing the negated literal.
   *
   * @literal: the literal to negate
@@ -70,7 +66,7 @@ static void insert(gpointer element, gpointer hash_set) {
 }
 
 static gboolean rec_resol(GHashTable* clauses, GQueue* unhandled_clauses) {
-  g_queue_sort(unhandled_clauses, (GCompareDataFunc)compare_by_size, NULL);
+  g_queue_sort(unhandled_clauses, (GCompareDataFunc)g_hash_set_compare_by_size, NULL);
 
   if (unhandled_clauses->length == 0)
     return TRUE;

@@ -98,3 +98,12 @@ void g_hash_set_foreach(GHashTable* hash_set, GFunc func, gpointer user_data) {
 GList* g_hash_set_iterator(GHashTable* hash_set) {
   return g_hash_table_get_keys(hash_set);
 }
+
+/** Compares two hash sets by their size.
+  *
+  * @set_a: a set
+  * @set_b: another set
+  */
+gint g_hash_set_compare_by_size(GHashTable* set_a, GHashTable* set_b, gpointer user_data) {
+  return g_hash_set_size(set_a) - g_hash_set_size(set_b);
+}
