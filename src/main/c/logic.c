@@ -65,73 +65,85 @@ static void insert(gpointer element, gpointer hash_set) {
   g_hash_set_insert(hash_set, element);
 }
 
-static gboolean rec_resol(GHashTable* clauses, GQueue* unhandled_clauses) {
-  g_queue_sort(unhandled_clauses, (GCompareDataFunc)g_hash_set_compare_by_size, NULL);
+/** Returns true if the expression is satisfiable. Uses recursion.
+  *
+  * @clauses:           the expression as a set of clauses
+  * @unhandled_clauses: the unhandled clauses which still need to be checked
+  *                     with every other clause
+  */
+static gboolean is_satisfiable_by_resolution_recursive(GHashTable* clauses, GQueue* unhandled_clauses) {
 
+  // no empty clause has been found -> satisfiable
   if (unhandled_clauses->length == 0)
     return TRUE;
 
-  else {
-    GHashTable* unhandled_clause = g_queue_pop_head(unhandled_clauses);
+  // -----------------------------------------------------------------------
+  // pick a clause to handle
+  // -----------------------------------------------------------------------
 
-    g_print("  handling: %s\n", clause_to_string(unhandled_clause));
+  // sort unhandled clauses to pick the shortest first
+  g_queue_sort(unhandled_clauses, (GCompareDataFunc)g_hash_set_compare_by_size, NULL);
 
-    GHashTable* new_clauses = g_hash_set_new((GHashFunc)clause_hash, (GEqualFunc)clause_equal);
+  GHashTable* cur_clause = g_queue_pop_head(unhandled_clauses);
 
-    GList* clause_iterator = g_hash_set_iterator(clauses);
-    clause_iterator = g_list_remove(clause_iterator, unhandled_clause);
+  g_print("  handling: %s\n", clause_to_string(cur_clause));
 
-    for (; clause_iterator; clause_iterator = clause_iterator->next) {
-      GHashTable* old_clause = clause_iterator->data;
+  // -----------------------------------------------------------------------
+  // find new clauses
+  // -----------------------------------------------------------------------
 
-      GList* literal_iterator = g_hash_set_iterator(unhandled_clause);
+  GHashTable* new_clauses = g_hash_set_new((GHashFunc)clause_hash, (GEqualFunc)clause_equal);
 
-      for (; literal_iterator; literal_iterator = literal_iterator->next) {
-        gchar*     literal = literal_iterator->data;
-        gchar* neg_literal = negate_literal(literal);
+  GList* clause_it = g_list_remove(g_hash_set_iterator(clauses), cur_clause);
 
-        if (g_hash_set_contains(old_clause, neg_literal)) {
-          GHashTable* new_clause_a = g_hash_set_new(g_str_hash, g_str_equal);
-          GHashTable* new_clause_b = g_hash_set_new(g_str_hash, g_str_equal);
+  for (; clause_it; clause_it = clause_it->next) {
+    GHashTable* old_clause = clause_it->data;
 
-          g_hash_set_foreach(unhandled_clause, insert, new_clause_a);
-          g_hash_set_foreach(      old_clause, insert, new_clause_b);
+    GList* literal_it = g_hash_set_iterator(cur_clause);
 
-          g_hash_set_remove(new_clause_a,     literal);
-          g_hash_set_remove(new_clause_b, neg_literal);
+    for (; literal_it; literal_it = literal_it->next) {
+      gchar*     literal = literal_it->data;
+      gchar* neg_literal = negate_literal(literal);
 
-          GHashTable* new_clause = g_hash_set_new(g_str_hash, g_str_equal);
+      if (g_hash_set_contains(old_clause, neg_literal)) {
+        GHashTable* new_clause_a = g_hash_set_new(g_str_hash, g_str_equal);
+        GHashTable* new_clause_b = g_hash_set_new(g_str_hash, g_str_equal);
 
-          g_hash_set_foreach(new_clause_a, insert, new_clause);
-          g_hash_set_foreach(new_clause_b, insert, new_clause);
+        g_hash_set_foreach(cur_clause, insert, new_clause_a);
+        g_hash_set_foreach(old_clause, insert, new_clause_b);
 
-          if ((!g_hash_set_contains(clauses,     new_clause)) &&
-              (!g_hash_set_contains(new_clauses, new_clause))) {
+        g_hash_set_remove(new_clause_a,     literal);
+        g_hash_set_remove(new_clause_b, neg_literal);
 
-            g_print("    ... and %s with literal %s -> %s\n",
-              clause_to_string(old_clause),
-              literal,
-              clause_to_string(new_clause)
-            );
+        GHashTable* new_clause = g_hash_set_new(g_str_hash, g_str_equal);
 
-            if (g_hash_set_size(new_clause) == 0) {
-              g_print("Found empty clause.\n");
-              return FALSE;
-            }
+        g_hash_set_foreach(new_clause_a, insert, new_clause);
+        g_hash_set_foreach(new_clause_b, insert, new_clause);
 
-            g_hash_set_insert(new_clauses, new_clause);
-          }
+        if ((!g_hash_set_contains(    clauses, new_clause)) &&
+            (!g_hash_set_contains(new_clauses, new_clause))) {
+
+          g_print("    ... and %s with literal %s -> %s\n",
+            clause_to_string(old_clause),
+            literal,
+            clause_to_string(new_clause)
+          );
+
+          if (g_hash_set_size(new_clause) == 0)
+            return FALSE;
+
+          g_hash_set_insert(new_clauses, new_clause);
         }
       }
     }
-
-    g_hash_set_foreach(new_clauses, insert,  clauses);
-    g_hash_set_foreach(new_clauses, enqueue, unhandled_clauses);
-
-    g_print("  clauses are now: %s\n", clauses_to_string(clauses));
-
-    return rec_resol(clauses, unhandled_clauses);
   }
+
+  g_hash_set_foreach(new_clauses, insert,  clauses);
+  g_hash_set_foreach(new_clauses, enqueue, unhandled_clauses);
+
+  g_print("  clauses are now: %s\n", clauses_to_string(clauses));
+
+  return is_satisfiable_by_resolution_recursive(clauses, unhandled_clauses);
 }
 
 /** Returns TRUE if the CNF is satisfiable using resolution.
@@ -144,7 +156,7 @@ gboolean is_satisfiable_by_resolution(GHashTable* clauses) {
   GQueue* unhandled_clauses = g_queue_new();
   g_hash_set_foreach(clauses, enqueue, unhandled_clauses);
 
-  gboolean result = rec_resol(clauses, unhandled_clauses);
+  gboolean result = is_satisfiable_by_resolution_recursive(clauses, unhandled_clauses);
 
   g_queue_free(unhandled_clauses);
 
