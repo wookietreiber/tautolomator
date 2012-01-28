@@ -36,6 +36,9 @@ GHashTable*   g_hash_set_new_full           (GHashFunc       hash_func,
                                              GEqualFunc      equal_func,
                                              GDestroyNotify  destroy_func);
 
+/** Destroys the hash set. */
+void          g_hash_set_destroy            (GHashTable*     hash_set);
+
 /** Returns the size of the hash set. */
 guint         g_hash_set_size               (GHashTable*     hash_set);
 

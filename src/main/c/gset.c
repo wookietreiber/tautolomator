@@ -46,6 +46,15 @@ GHashTable* g_hash_set_new_full(GHashFunc hash_func, GEqualFunc equal_func, GDes
   return g_hash_table_new_full(hash_func, equal_func, destroy_func, NULL);
 }
 
+/** Destroys the hash set and, if the set has been created with the
+  * GDestroyNotify function, all elements too.
+  *
+  * @hash_set: the set to destroy
+  */
+void g_hash_set_destroy(GHashTable* hash_set) {
+  g_hash_table_destroy(hash_set);
+}
+
 /** Returns the size of the hash set.
   *
   * @hash_set: a hash set
