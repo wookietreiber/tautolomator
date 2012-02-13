@@ -1,5 +1,5 @@
-Boolean Logic Simulator
-=======================
+Boolean Logic Algorithm Simulator
+=================================
 
 This project provides a simulator for algorithms used in [Boolean Logic][1]
 which is intended to be a helpful learning tool for computer science students.
