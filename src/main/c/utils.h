@@ -30,10 +30,10 @@ gchar*        strdel                         (gchar*          str,
                                               gchar*          delim);
 
 /** Returns a set of literals parsed from the given string. */
-GHashTable*   disjunction_to_clause          (gchar*          string);
+GHashTable*   disjunction_to_clause          (gchar*          str);
 
 /** Returns a set of clauses parsed from the given string. */
-GHashTable*   cnf_to_clauses                 (gchar*          input);
+GHashTable*   cnf_to_clauses                 (gchar*          str);
 
   // -----------------------------------------------------------------------
   // hash functions

@@ -42,13 +42,12 @@ gchar* strdel(gchar* str, gchar* delim) {
 
 /** Returns a set of literals parsed from the given string.
   *
-  * @string: the disjunction as a string,
-  *          e.g. "-AvBvC"
+  * @str: the disjunction as a string, e.g. "-AvBvC"
   */
-GHashTable* disjunction_to_clause(gchar* string) {
+GHashTable* disjunction_to_clause(gchar* str) {
   GHashTable* clause = g_hash_set_new(g_str_hash, g_str_equal);
 
-  gchar** literals = g_strsplit(string, OR, -1);
+  gchar** literals = g_strsplit(str, OR, -1);
 
   int i;
   for (i = 0; literals[i] != NULL; i++) {
@@ -60,13 +59,13 @@ GHashTable* disjunction_to_clause(gchar* string) {
 
 /** Returns a set of clauses parsed from the given string.
   *
-  * @string: the conjunction of disjunctions of literals as a string,
-  *          e.g. "(AvB)^(Av-B)"
+  * @str: the conjunction of disjunctions of literals as a string,
+  *       e.g. "(AvB)^(Av-B)"
   */
-GHashTable* cnf_to_clauses(gchar* input) {
+GHashTable* cnf_to_clauses(gchar* str) {
   GHashTable* clauses = g_hash_set_new((GHashFunc)clause_hash, (GEqualFunc)clause_equal);
 
-  gchar** clauses_strings = g_strsplit(input, AND, -1);
+  gchar** clauses_strings = g_strsplit(str, AND, -1);
 
   int i;
   for (i = 0; clauses_strings[i] != NULL; i++) {
