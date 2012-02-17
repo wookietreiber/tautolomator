@@ -3,6 +3,11 @@ Boolean Logic Algorithm Simulator
 
 This project provides a simulator for algorithms used in [Boolean Logic][1]
 which is intended to be a helpful learning tool for computer science students.
+This project has been started by computer science stundents of the [University
+of Cooperative Education Leipzig][9] during the "Programming in C/C++" seminar.
+It is intended to be extended by students of the following terms or even other
+universities. For some ideas about how to extend this project see the extensions
+section below.
 
 
 Supported Algorithms
@@ -75,6 +80,13 @@ $ tautolomator --help
 ```
 
 
+Possible Extensions
+===================
+
+- satisfiability using the [horn clause algorithm][8]
+- boolean expression converter, e.g. convert an expression to a CNF
+
+
 [1]: http://en.wikipedia.org/wiki/Boolean_logic
 [2]: http://developer.gnome.org/glib/
 [3]: http://www.cmake.org/
@@ -82,4 +94,6 @@ $ tautolomator --help
 [5]: http://en.wikipedia.org/wiki/Conjunctive_normal_form
 [6]: http://en.wikipedia.org/wiki/Boolean_satisfiability_problem
 [7]: http://en.wikipedia.org/wiki/Resolution_(logic)
+[8]: http://en.wikipedia.org/wiki/Horn-satisfiability
+[9]: http://www.ba-leipzig.de/
 
